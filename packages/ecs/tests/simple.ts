@@ -60,18 +60,16 @@ class PrinterSystem extends System {
 
 
 function main() {
-    console.log("running the test")
-
     const entity_a = new Entity()
     entity_a.add_component(new PositionComponent(10, 10));
     entity_a.add_component(new SpeedComponent(10, 10));
 
     const entity_b = new Entity()
-    entity_a.add_component(new PositionComponent(5, 5));
-    entity_a.add_component(new ColorComponent("red"));
+    entity_b.add_component(new PositionComponent(5, 5));
+    entity_b.add_component(new ColorComponent("red"));
 
     const entity_c = new Entity()
-    entity_a.add_component(new PositionComponent(20, 20));
+    entity_c.add_component(new PositionComponent(20, 20));
 
     const engine = new Engine();
     engine.add_entity_batch([entity_a, entity_b, entity_c])
