@@ -1,0 +1,8 @@
+{
+  "name": "ecs",
+  "version": "1.0.0",
+  "description": "ECS for typescript",
+  "main": "index.js",
+  "author": "planchon",
+  "license": "MIT"
+}
