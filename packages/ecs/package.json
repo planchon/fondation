@@ -1,8 +1,17 @@
 {
-  "name": "ecs",
+  "name": "@fondation/ecs",
+  "private": true,
   "version": "1.0.0",
-  "description": "ECS for typescript",
-  "main": "index.js",
-  "author": "planchon",
-  "license": "MIT"
+  "description": "Entity Component System library for Fondation",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo ecs build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "typescript": "^5.0.2" 
+  }
 }
