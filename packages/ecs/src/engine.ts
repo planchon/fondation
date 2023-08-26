@@ -12,6 +12,8 @@ export class Engine {
     component_to_bits: Map<string, Bits>;
 
     constructor() {
+        console.log("[ecs   ] initing the engine");
+
         this.entities = [];
         this.render_system = [];
         this.tick_system = [];

@@ -16,7 +16,7 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2
 
-  web/fondation:
+  web/game:
     dependencies:
       '@fondation/ecs':
         specifier: workspace:*
