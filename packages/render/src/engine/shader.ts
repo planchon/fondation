@@ -97,6 +97,11 @@ export class Shader {
         return this.engine.gl.getUniformLocation(this.program, name);
     }
 
+    set_uniform1i(name: string, value: number) {
+        var location = this.engine.gl.getUniformLocation(this.program, name)
+        this.engine.gl.uniform1i(location, value)
+    }
+
     create_program() {
         const gl = this.engine.gl;
         this.program = gl.createProgram() as WebGLProgram;

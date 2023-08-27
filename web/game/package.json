@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@fondation/ecs": "workspace:*",
-    "@fondation/render": "workspace:*"
+    "@fondation/render": "workspace:*",
+    "stats-js": "1.0.1"
   },
   "devDependencies": {
     "vite": "^4.4.5"

@@ -1,3 +1,1 @@
-export abstract class Element {
-    render() { }
-}
+export abstract class Element { }

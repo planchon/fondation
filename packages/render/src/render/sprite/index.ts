@@ -1,4 +1,4 @@
-import { FragmentShader, MAX_BATCH, Render, Shader, VertexShader } from "../../engine"
+import { FragmentShader, MAX_BATCH, Render, RenderImage, Shader, VertexShader } from "../../engine"
 
 import fragment_shader_source from "./shader/main.fragment";
 import vertex_shader_source from "./shader/main.vertex";
@@ -6,13 +6,15 @@ import vertex_shader_source from "./shader/main.vertex";
 export class SpriteRenderEngine {
     shader: Shader
     render: Render
+    tileset_path: string;
+    tileset: RenderImage
 
     internal_array: ArrayBuffer
     elements_data: Float32Array;
     elements_buffer: WebGLBuffer;
     elements_count: number = 0;
 
-    constructor(render: Render) {
+    constructor(render: Render, tileset_path: string) {
         console.log("[render] initing the sprite engine");
         this.render = render;
 
@@ -24,11 +26,14 @@ export class SpriteRenderEngine {
                     shader_var: "pos"
                 },
                 "col": {
-                    size: 3,
+                    size: 2,
                     shader_var: "col"
                 },
             }
         }
+
+        this.tileset_path = tileset_path;
+        this.tileset = new RenderImage(this.tileset_path, this.render);
 
         const fragment_shader: FragmentShader = {
             source: fragment_shader_source
@@ -67,25 +72,23 @@ export class SpriteRenderEngine {
     }
 
     draw() {
+        this.render.clear_background();
         let i = 0;
 
         this.elements_data[i++] = -1;
         this.elements_data[i++] = 0;
-        this.elements_data[i++] = 1;
-        this.elements_data[i++] = 0;
+        this.elements_data[i++] = 0.1;
         this.elements_data[i++] = 0;
 
         this.elements_data[i++] = 0;
         this.elements_data[i++] = 0;
-        this.elements_data[i++] = 0;
-        this.elements_data[i++] = 1;
+        this.elements_data[i++] = 0.1;
         this.elements_data[i++] = 0;
 
         this.elements_data[i++] = -1;
         this.elements_data[i++] = -1;
-        this.elements_data[i++] = 0;
-        this.elements_data[i++] = 0;
-        this.elements_data[i++] = 1;
+        this.elements_data[i++] = 0.2;
+        this.elements_data[i++] = 0.1;
 
         this.elements_count = 3;
 
@@ -93,11 +96,13 @@ export class SpriteRenderEngine {
 
         const gl = this.render.gl;
 
+        gl.activeTexture(gl.TEXTURE0)
+        gl.bindTexture(gl.TEXTURE_2D, this.tileset.texture);
+        this.shader.set_uniform1i("sprite", 0);
+
         const sub_array = this.elements_data.subarray(0, this.elements_count * this.shader.get_attrib_element_size())
 
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, sub_array);
         gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0, this.elements_count);
-
-        console.debug("[render] draw completed");
     }
 }

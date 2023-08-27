@@ -1,9 +1,12 @@
 export default `
 precision mediump float;
+uniform sampler2D sprite;
 
-varying vec3 i;
+varying vec2 uv;
 
 void main(void) {
-    gl_FragColor = vec4(i, 1.0);
+    vec4 c = texture2D(sprite, uv);
+    //c = vec4(uv, 0, 1);
+    gl_FragColor = c;
 }
 `;

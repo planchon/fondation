@@ -1,6 +1,6 @@
 import { Render } from ".";
 
-export class RenderImage extends Element {
+export class RenderImage {
     engine: Render;
     width: number;
     height: number;
@@ -9,8 +9,6 @@ export class RenderImage extends Element {
     texture: WebGLTexture
 
     constructor(path: string, render: Render) {
-        super();
-
         this.path = path;
         this.engine = render;
 
@@ -26,7 +24,8 @@ export class RenderImage extends Element {
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
         let img = new Image();
         img.addEventListener('load', function() {
