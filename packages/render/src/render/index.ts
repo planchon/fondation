@@ -4,17 +4,19 @@ export class Render {
 
     position_buffer: WebGLBuffer
     texcoords_buffer: WebGLBuffer
+    angle_array_ext: ANGLE_instanced_arrays
 
     constructor(canvas: HTMLCanvasElement) {
         console.log("[render] initing the engine");
 
         this.canvas = canvas;
-        this.init_engine();
-        this.clear_background();
 
         window.addEventListener("resize", () => {
             this.on_resize();
         })
+
+        this.init_engine();
+        this.clear_background();
     }
 
     init_engine() {
@@ -27,30 +29,19 @@ export class Render {
         } else {
             this.gl = ctx as WebGL2RenderingContext;
         }
+
+        this.angle_array_ext = ctx.getExtension("ANGLE_instanced_arrays") as ANGLE_instanced_arrays
+        this.init_rect_buffers();
     }
 
     init_rect_buffers() {
         const gl = this.gl
 
-        const positions = [
-            0, 0,
-            0, 1,
-            1, 0,
-            1, 0,
-            0, 1,
-            1, 1,
-        ];
-        this.position_buffer = this.create_buffer(gl.ARRAY_BUFFER, new Float32Array(positions)) as WebGLBuffer;
+        // we only create a rect, bc all images are only rect
+        this.create_buffer(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array([0, 1, 2, 2, 1, 3]))
+        this.create_buffer(gl.ARRAY_BUFFER, new Uint8Array([0, 0, 0, 1, 1, 0, 1, 1]))
 
-        const texcoords = [
-            0, 0,
-            0, 1,
-            1, 0,
-            1, 0,
-            0, 1,
-            1, 1,
-        ]
-        this.texcoords_buffer = this.create_buffer(gl.ARRAY_BUFFER, new Float32Array(texcoords)) as WebGLBuffer;
+        console.debug("[render] buffers inited")
     }
 
     on_resize() {
@@ -66,12 +57,13 @@ export class Render {
     }
 
     create_buffer(type, src) {
-        const buffer_id = this.gl.createBuffer()
+        const buffer_id = this.gl.createBuffer() as WebGLBuffer
         this.gl.bindBuffer(type, buffer_id);
         this.gl.bufferData(type, src, this.gl.STATIC_DRAW);
         return buffer_id;
     }
 
+    // flush the render buffer into GPU
     flush() {
         const gl = this.gl;
         gl.depthFunc(gl.LEQUAL);

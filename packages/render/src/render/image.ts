@@ -1,6 +1,6 @@
 import { Render } from ".";
 
-export class RenderImage {
+export class RenderImage extends Element {
     engine: Render;
     width: number;
     height: number;
@@ -9,6 +9,8 @@ export class RenderImage {
     texture: WebGLTexture
 
     constructor(path: string, render: Render) {
+        super();
+
         this.path = path;
         this.engine = render;
 
@@ -33,6 +35,7 @@ export class RenderImage {
 
             gl.bindTexture(gl.TEXTURE_2D, self.texture)
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
+            gl.generateMipmap(gl.TEXTURE_2D);
         })
 
         img.src = self.path;

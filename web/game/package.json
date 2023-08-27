@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@fondation/ecs": "workspace:*",
-    "@fondation/engine": "workspace:*"
+    "@fondation/render": "workspace:*"
   },
   "devDependencies": {
     "vite": "^4.4.5"

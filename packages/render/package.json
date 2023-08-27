@@ -1,8 +1,8 @@
 {
-  "name": "@fondation/engine",
+  "name": "@fondation/render",
   "version": "1.0.0",
   "private": true,
-  "description": "",
+  "description": "2D WebGL render library",
   "main": "src/index.ts",
   "scripts": {
     "dev": "echo engine dev",

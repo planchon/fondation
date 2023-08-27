@@ -10,7 +10,7 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2
 
-  packages/engine:
+  packages/render:
     dependencies:
       typescript:
         specifier: ^5.0.2
@@ -21,9 +21,9 @@ importers:
       '@fondation/ecs':
         specifier: workspace:*
         version: link:../../packages/ecs
-      '@fondation/engine':
+      '@fondation/render':
         specifier: workspace:*
-        version: link:../../packages/engine
+        version: link:../../packages/render
       typescript:
         specifier: ^5.0.2
         version: 5.0.2

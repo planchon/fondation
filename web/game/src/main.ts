@@ -1,4 +1,4 @@
-import { Render } from "@fondation/engine";
+import { Render } from "@fondation/render";
 import { Engine } from "@fondation/ecs";
 
 function main() {
