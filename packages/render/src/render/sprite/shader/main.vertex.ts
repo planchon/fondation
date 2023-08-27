@@ -1,9 +1,12 @@
 export default `
 attribute vec2 g;
 attribute vec2 pos;
-attribute vec2 uv;
+attribute vec3 col;
+
+varying vec3 i;
 
 void main(void) {
-    gl_Position = vec4(g + pos + uv, 0, 1.0);
+    i = col;
+    gl_Position = vec4(g + pos, 0, 1.0);
 }
 `;

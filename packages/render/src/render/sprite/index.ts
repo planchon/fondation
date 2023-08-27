@@ -9,6 +9,7 @@ export class SpriteRenderEngine {
 
     internal_array: ArrayBuffer
     elements_data: Float32Array;
+    elements_buffer: WebGLBuffer;
     elements_count: number = 0;
 
     constructor(render: Render) {
@@ -22,9 +23,9 @@ export class SpriteRenderEngine {
                     size: 2,
                     shader_var: "pos"
                 },
-                "uv": {
-                    size: 2,
-                    shader_var: "uv"
+                "col": {
+                    size: 3,
+                    shader_var: "col"
                 },
             }
         }
@@ -44,7 +45,8 @@ export class SpriteRenderEngine {
         // we use the element_data to store the data well
         const gl = this.render.gl
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+        this.elements_buffer = gl.createBuffer() as WebGLBuffer;
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.elements_buffer);
         // ref to internal_array, element_data -> internal_array
         gl.bufferData(gl.ARRAY_BUFFER, this.internal_array, gl.DYNAMIC_DRAW);
 
@@ -69,15 +71,23 @@ export class SpriteRenderEngine {
 
         this.elements_data[i++] = -1;
         this.elements_data[i++] = 0;
+        this.elements_data[i++] = 1;
         this.elements_data[i++] = 0;
+        this.elements_data[i++] = 0;
+
+        this.elements_data[i++] = 0;
+        this.elements_data[i++] = 0;
+        this.elements_data[i++] = 0;
+        this.elements_data[i++] = 1;
         this.elements_data[i++] = 0;
 
         this.elements_data[i++] = -1;
         this.elements_data[i++] = -1;
         this.elements_data[i++] = 0;
         this.elements_data[i++] = 0;
+        this.elements_data[i++] = 1;
 
-        this.elements_count = 1;
+        this.elements_count = 3;
 
         this.shader.use_shader();
 

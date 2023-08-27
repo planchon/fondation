@@ -75,18 +75,22 @@ export class Shader {
     init_attrib() {
         let offset = 0;
         for (var attrib of Object.values(this.vertex.attribs)) {
-            this.bind_attrib(attrib.shader_var, attrib.size, offset);
+            this.bind_attrib(attrib.shader_var, attrib.size, offset, this.get_attrib_element_size() * 4, 1);
 
             // everything is float for the moment (4 bytes)
             offset += 4 * attrib.size
         }
     }
 
-    bind_attrib(name: string, size: number, offset: number) {
+    bind_attrib(name: string, size: number, offset: number, stride: number = 0, divisor: number = -1) {
         const gl = this.engine.gl;
         const location = gl.getAttribLocation(this.program, name);
         gl.enableVertexAttribArray(location);
-        gl.vertexAttribPointer(location, size, gl.FLOAT, false, this.get_attrib_element_size() * 4, offset);
+        gl.vertexAttribPointer(location, size, gl.FLOAT, false, stride, offset);
+
+        if (divisor >= 0) {
+            gl.vertexAttribDivisor(location, divisor);
+        }
     }
 
     get_uniform(name: string) {
