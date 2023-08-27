@@ -1,35 +1,20 @@
 import { Render } from "."
 
-type VertexShader = {
+export type VertexShader = {
     source: string,
     attribs: {
         [key: string]: {
-            type: string,
             size: number
             shader_var: string;
         }
     },
-    uniforms: {
-        [key: string]: {
-            type: string,
-            size: number
-            shader_var: string;
-        }
-    }
 }
 
-type FragmentShader = {
+export type FragmentShader = {
     source: string,
-    uniforms: {
-        [key: string]: {
-            type: string,
-            size: number
-            shader_var: string;
-        }
-    }
 }
 
-const MAX_BATCH = 65535;
+export const MAX_BATCH = 65535;
 
 export class Shader {
     fragment: FragmentShader
@@ -48,19 +33,17 @@ export class Shader {
         this.engine = engine;
 
         console.debug("[render] initing a shader")
-        this.init_buffer();
         this.compile();
         this.create_program();
     }
 
-    init_buffer() {
+    get_attrib_element_size(): number {
         let attrib_size = 0;
         for (var k of Object.values(this.vertex.attribs)) {
             attrib_size += k.size
         }
 
-        // MAX_BATCH is the max number of el per layer (ie per draw call also)
-        this.shader_render_data = new Float32Array(attrib_size * MAX_BATCH);
+        return attrib_size;
     }
 
     compile() {
@@ -81,14 +64,9 @@ export class Shader {
         gl.shaderSource(shader, source_code);
         gl.compileShader(shader);
 
-        if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
             const error = gl.getShaderInfoLog(shader);
-            gl.deleteShader(shader);
-            const msg = `
-                Error while compiling a shader : 
-                ${error}
-            `;
-            throw new Error(msg)
+            throw new Error(`Error while compiling the shader ${type}\n\n${error}`)
         }
 
         return shader;
@@ -98,17 +76,17 @@ export class Shader {
         let offset = 0;
         for (var attrib of Object.values(this.vertex.attribs)) {
             this.bind_attrib(attrib.shader_var, attrib.size, offset);
+
             // everything is float for the moment (4 bytes)
             offset += 4 * attrib.size
         }
     }
 
-    bind_attrib(name: string, size: number, stride: number) {
+    bind_attrib(name: string, size: number, offset: number) {
         const gl = this.engine.gl;
         const location = gl.getAttribLocation(this.program, name);
         gl.enableVertexAttribArray(location);
-        gl.vertexAttribPointer(location, size, gl.FLOAT, true, stride, 0);
-        this.engine.angle_array_ext.vertexAttribDivisorANGLE(location, 1);
+        gl.vertexAttribPointer(location, size, gl.FLOAT, false, this.get_attrib_element_size() * 4, offset);
     }
 
     get_uniform(name: string) {
@@ -121,6 +99,10 @@ export class Shader {
         gl.attachShader(this.program, this.vertex_shader);
         gl.attachShader(this.program, this.fragment_shader);
         gl.linkProgram(this.program);
+
+        if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+            throw new Error("program failed to link" + gl.getProgramInfoLog(this.program))
+        }
     }
 
     use_shader() {
