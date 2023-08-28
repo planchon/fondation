@@ -14,5 +14,8 @@
   "license": "ISC",
   "peerDependencies": {
     "typescript": "^5.0.2" 
+  },
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
   }
 }

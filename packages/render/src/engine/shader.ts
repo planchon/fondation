@@ -102,6 +102,21 @@ export class Shader {
         this.engine.gl.uniform1i(location, value)
     }
 
+    set_uniform2f(name: string, x: number, y: number) {
+        var location = this.engine.gl.getUniformLocation(this.program, name)
+        this.engine.gl.uniform2f(location, x, y);
+    }
+
+    set_mat3f(name: string, mat) {
+        var location = this.engine.gl.getUniformLocation(this.program, name)
+        this.engine.gl.uniformMatrix3fv(location, false, mat);
+    }
+
+    set_mat4f(name: string, mat) {
+        var location = this.engine.gl.getUniformLocation(this.program, name)
+        this.engine.gl.uniformMatrix4fv(location, false, mat);
+    }
+
     create_program() {
         const gl = this.engine.gl;
         this.program = gl.createProgram() as WebGLProgram;

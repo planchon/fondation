@@ -3,7 +3,6 @@ import { mat4 } from "gl-matrix";
 
 import fragment_shader_source from "./shader/main.fragment";
 import vertex_shader_source from "./shader/main.vertex";
-import { XR } from "aws-amplify";
 
 export class SpriteRenderEngine {
     shader: Shader
@@ -112,7 +111,8 @@ export class SpriteRenderEngine {
         this.shader.set_uniform2f("screen", this.render.canvas.width, this.render.canvas.height);
 
         let matrix = mat4.create();
-        matrix = mat4.ortho(matrix, 0, this.render.canvas.width, 0, this.render.canvas.height, 0.01, 1000);
+        matrix = mat4.ortho(matrix, 0, this.render.canvas.width, 0, this.render.canvas.height, 0.0001, 1000);
+        console.log(matrix);
         this.shader.set_mat4f("projection", matrix)
 
         const sub_array = this.elements_data.subarray(0, this.elements_count * this.shader.get_attrib_element_size())
